@@ -14,12 +14,12 @@ export class InMemoryTagRepository implements TagRepository {
     return Promise.resolve(this.tags);
   }
 
-  async findById(id: number): Promise<Tag | undefined> {
-    return Promise.resolve(this.tags.find((u) => u.id === id));
+  async findById(id: number): Promise<Tag | null> {
+    return Promise.resolve(this.tags.find((u) => u.id === id) || null);
   }
 
-  async findByName(name: string): Promise<Tag | undefined> {
-    return Promise.resolve(this.tags.find((u) => u.name === name));
+  async findByName(name: string): Promise<Tag | null> {
+    return Promise.resolve(this.tags.find((u) => u.name === name) || null);
   }
 
   async update(id: number, data: Partial<Tag>): Promise<Tag> {

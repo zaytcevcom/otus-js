@@ -7,12 +7,15 @@ import { AdditionalMaterialModule } from './additional-material/additional-mater
 import { CommentModule } from './comment/comment.module';
 import { ProblemRatingModule } from './problem-rating/problem-rating.module';
 import { TagModule } from './tag/tag.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AppDataSource } from '../data-source';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    TypeOrmModule.forRoot(AppDataSource.options),
     AuthModule,
     UserModule,
     ProblemModule,

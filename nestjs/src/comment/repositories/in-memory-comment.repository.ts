@@ -5,9 +5,9 @@ export class InMemoryCommentRepository implements CommentRepository {
   private comments: Comment[] = [];
 
   async create(data: Partial<Comment>): Promise<Comment> {
-    const newComment = { id: this.comments.length + 1, ...data } as Comment;
-    this.comments.push(newComment);
-    return Promise.resolve(newComment);
+    const comment = { id: this.comments.length + 1, ...data } as Comment;
+    this.comments.push(comment);
+    return Promise.resolve(comment);
   }
 
   async getAll(): Promise<Comment[]> {
@@ -20,8 +20,8 @@ export class InMemoryCommentRepository implements CommentRepository {
     );
   }
 
-  async findById(id: number): Promise<Comment | undefined> {
-    return Promise.resolve(this.comments.find((u) => u.id === id));
+  async findById(id: number): Promise<Comment | null> {
+    return Promise.resolve(this.comments.find((u) => u.id === id) || null);
   }
 
   async update(id: number, data: Partial<Comment>): Promise<Comment> {

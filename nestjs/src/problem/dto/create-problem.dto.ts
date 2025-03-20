@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsString } from 'class-validator';
-import { AdditionalMaterial } from '../../additional-material/entities/additional-material.entity';
 
 export class CreateProblemDto {
   @ApiProperty({
@@ -49,7 +48,7 @@ export class CreateProblemDto {
     example: [],
     description: 'Additional material',
   })
-  additionalMaterials: AdditionalMaterial[];
+  additionalMaterials: number[];
 
   @ApiProperty({
     example: 5,

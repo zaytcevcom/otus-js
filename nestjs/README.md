@@ -62,7 +62,7 @@ export class Problem {
     outputExample: string;
     difficulty: 'Easy' | 'Medium' | 'Hard';
     tags: string[];
-    additionalMaterials: AdditionalMaterial[];
+    additionalMaterials: number[];
     rating: number;
     createdBy: number; // ID пользователя-создателя
     createdAt: Date;

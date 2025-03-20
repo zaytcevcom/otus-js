@@ -25,8 +25,10 @@ export class InMemoryAdditionalMaterialRepository
     );
   }
 
-  async findById(id: number): Promise<AdditionalMaterial | undefined> {
-    return Promise.resolve(this.additionalMaterials.find((u) => u.id === id));
+  async findById(id: number): Promise<AdditionalMaterial | null> {
+    return Promise.resolve(
+      this.additionalMaterials.find((u) => u.id === id) || null,
+    );
   }
 
   async update(

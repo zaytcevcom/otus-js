@@ -1,0 +1,103 @@
+services:
+  traefik:
+    image: traefik:3.0
+    command:
+      --providers.docker=true
+      --providers.docker.exposedByDefault=false
+      --entryPoints.http.address=:80
+    ports:
+      - "801:80"
+    networks:
+      - traefik-public
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik-public
+
+  nginx:
+    build:
+      context: docker/development/nginx
+    networks:
+      - traefik-public
+      - default
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik-public
+      - traefik.http.routers.otus-js.rule=Host(`otus.localhost`) || Host(`www.otus.localhost`)
+      - traefik.http.routers.otus-js.entryPoints=http
+      - traefik.http.services.otus-js.loadBalancer.server.port=80
+      - traefik.http.middlewares.otus-js-redirect.redirectRegex.regex=^(https?://)www.otus.localhost/(.*)$$
+      - traefik.http.middlewares.otus-js-redirect.redirectRegex.replacement=$${1}otus.localhost/$${2}
+      - traefik.http.middlewares.otus-js-redirect.redirectRegex.permanent=true
+      - traefik.http.routers.otus-js.middlewares=otus-js-redirect
+
+  node:
+    build:
+      context: docker
+      dockerfile: development/node/Dockerfile
+    depends_on:
+      - postgres
+    networks:
+      - default
+    environment:
+      WDS_SOCKET_PORT: 0
+      JWT_SECRET: "jdshfsdhfsdfsdiufhsadhfkjsaklfjkshogds"
+      JWT_EXPIRES_IN: "30d"
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      DB_DATABASE: db
+      DB_SYNCHRONIZE: 1
+    volumes:
+      - .:/app
+    command: >
+      bash -c 'until [ -f .ready ]; do sleep 1 ; done &&
+      npm run start:dev'
+    tty: true
+
+  node-cli:
+    build:
+      context: docker
+      dockerfile: development/node/Dockerfile
+    networks:
+      - default
+    environment:
+      WDS_SOCKET_PORT: 0
+      JWT_SECRET: "jdshfsdhfsdfsdiufhsadhfkjsaklfjkshogds"
+      JWT_EXPIRES_IN: "30d"
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      DB_DATABASE: db
+      DB_SYNCHRONIZE: 1
+    volumes:
+      - .:/app
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    networks:
+      - default
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: db
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+
+networks:
+  traefik-public:
+    name: traefik-public

@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
-import { InMemoryUserRepository } from './repositories/in-memory-user.repository';
 import { UserRepository } from './repositories/user-repository.interface';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { DbUserRepository } from './repositories/db-user.repository';
+import { User } from './entities/user.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
@@ -16,12 +18,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
       inject: [ConfigService],
     }),
+    TypeOrmModule.forFeature([User]),
   ],
   providers: [
     UserService,
     {
       provide: UserRepository,
-      useClass: InMemoryUserRepository,
+      useClass: DbUserRepository,
     },
   ],
   controllers: [UserController],

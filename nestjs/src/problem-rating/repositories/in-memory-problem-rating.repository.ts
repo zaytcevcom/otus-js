@@ -25,8 +25,10 @@ export class InMemoryProblemRatingRepository
     );
   }
 
-  async findById(id: number): Promise<ProblemRating | undefined> {
-    return Promise.resolve(this.problemRatings.find((u) => u.id === id));
+  async findById(id: number): Promise<ProblemRating | null> {
+    return Promise.resolve(
+      this.problemRatings.find((u) => u.id === id) || null,
+    );
   }
 
   async update(
