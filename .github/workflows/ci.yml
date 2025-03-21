@@ -65,3 +65,45 @@ jobs:
 
       - name: Push
         run: make push
+
+  deploy:
+    needs: build
+#    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: nestjs
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Inject branch slug
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Set image tag
+        run: echo "IMAGE_TAG=${GITHUB_REF_SLUG}-${GITHUB_RUN_NUMBER}" >> $GITHUB_ENV
+
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.PRODUCTION_KEY }}
+          known_hosts: ${{ vars.PRODUCTION_HOST }}
+
+      - name: Deploy
+        run: make deploy
+        env:
+          DOCKERHUB_USER: ${{ env.REGISTRY_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ env.REGISTRY_PASSWORD }}
+          BUILD_NUMBER: ${GITHUB_RUN_NUMBER}
+          HOST: ${{ vars.PRODUCTION_HOST }}
+          PORT: ${{ vars.PRODUCTION_PORT }}
+          PROJECT_NAME: ${{ vars.PROJECT_NAME }}
+          DOMAIN: ${{ vars.DOMAIN }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_EXPIRES_IN: ${{ vars.JWT_EXPIRES_IN }}
+          DB_HOST: ${{ vars.DB_HOST }}
+          DB_PORT: ${{ vars.DB_PORT }}
+          DB_USERNAME: ${{ vars.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_DATABASE: ${{ vars.DB_DATABASE }}
+          DB_SYNCHRONIZE: ${{ vars.DB_SYNCHRONIZE }}
