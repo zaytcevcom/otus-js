@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: nodejs
+        working-directory: nestjs
 
     steps:
       - uses: actions/checkout@v4
@@ -42,7 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: nodejs
+        working-directory: nestjs
 
     steps:
       - uses: actions/checkout@v4
