@@ -71,7 +71,7 @@ export class Problem {
 ```
 3.	AdditionalMaterial (Дополнительный материал)
 ```ts
-export class Submission {
+export class AdditionalMaterial {
     id: number;
     problemId: number;
     type: 'file' | 'link';

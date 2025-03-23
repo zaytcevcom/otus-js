@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
-import {UserService} from "./user.service";
-import {UserRepository} from "./repositories/user-repository.interface";
-import {InMemoryUserRepository} from "./repositories/in-memory-user.repository";
-import {JwtModule} from "@nestjs/jwt";
-import {ConfigModule, ConfigService} from "@nestjs/config";
+import { UserService } from './user.service';
+import { UserRepository } from './repositories/user-repository.interface';
+import { InMemoryUserRepository } from './repositories/in-memory-user.repository';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 describe('UserController', () => {
   let controller: UserController;

@@ -1,0 +1,19 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString } from 'class-validator';
+
+export class CreateTagDto {
+  @ApiProperty({
+    example: 'JavaScript Counter',
+    description: 'Name of problem',
+  })
+  @IsString()
+  name: string;
+
+  @ApiProperty({
+    example:
+      'Given an integer n, return a counter function. This counter function initially returns n and then returns 1 more than the previous value every subsequent time it is called (n, n + 1, n + 2, etc).',
+    description: 'Description of problem',
+  })
+  @IsString()
+  description: string;
+}
