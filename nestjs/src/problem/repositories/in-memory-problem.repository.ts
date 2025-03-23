@@ -14,8 +14,8 @@ export class InMemoryProblemRepository implements ProblemRepository {
     return Promise.resolve(this.problems);
   }
 
-  async findById(id: number): Promise<Problem | undefined> {
-    return Promise.resolve(this.problems.find((u) => u.id === id));
+  async findById(id: number): Promise<Problem | null> {
+    return Promise.resolve(this.problems.find((u) => u.id === id) || null);
   }
 
   async update(id: number, data: Partial<Problem>): Promise<Problem> {

@@ -2,9 +2,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { UserRepository } from './repositories/user-repository.interface';
-import { InMemoryUserRepository } from './repositories/in-memory-user.repository';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { DbUserRepository } from './repositories/db-user.repository';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
+import { AppDataSource } from '../../data-source';
 
 describe('UserController', () => {
   let controller: UserController;
@@ -20,13 +23,15 @@ describe('UserController', () => {
           }),
           inject: [ConfigService],
         }),
+        TypeOrmModule.forRoot(AppDataSource.options),
+        TypeOrmModule.forFeature([User]),
       ],
       controllers: [UserController],
       providers: [
         UserService,
         {
           provide: UserRepository,
-          useClass: InMemoryUserRepository,
+          useClass: DbUserRepository,
         },
       ],
     }).compile();

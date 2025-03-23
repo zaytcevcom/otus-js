@@ -14,12 +14,12 @@ export class InMemoryUserRepository implements UserRepository {
     return Promise.resolve(this.users);
   }
 
-  async findById(id: number): Promise<User | undefined> {
-    return Promise.resolve(this.users.find((u) => u.id === id));
+  async findById(id: number): Promise<User | null> {
+    return Promise.resolve(this.users.find((u) => u.id === id) || null);
   }
 
-  async findByEmail(email: string): Promise<User | undefined> {
-    return Promise.resolve(this.users.find((u) => u.email === email));
+  async findByEmail(email: string): Promise<User | null> {
+    return Promise.resolve(this.users.find((u) => u.email === email) || null);
   }
 
   async update(id: number, data: Partial<User>): Promise<User> {
