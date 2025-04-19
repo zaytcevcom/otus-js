@@ -1,0 +1,26 @@
+.badge {
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: 500;
+
+  &.Easy {
+    background-color: #28a745;
+    color: white;
+  }
+
+  &.Medium {
+    background-color: #ffc107;
+    color: black;
+  }
+
+  &.Hard {
+    background-color: #dc3545;
+    color: white;
+  }
+}
+
+.mat-column-actions {
+  width: 120px;
+  text-align: center;
+}

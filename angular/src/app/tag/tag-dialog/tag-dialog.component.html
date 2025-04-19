@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>
+  {{ mode === 'add' ? 'Добавление тега' : 'Редактирование тега' }}
+</h1>
+
+<div mat-dialog-content>
+  <app-tag-form
+    [tag]="tag"
+    (formSubmit)="onFormSubmit($event)"
+    (cancel)="dialogRef.close()">
+  </app-tag-form>
+</div>

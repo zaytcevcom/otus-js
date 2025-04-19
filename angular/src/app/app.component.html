@@ -1,0 +1,21 @@
+<mat-toolbar color="primary">
+  <span>{{title}}</span>
+
+  <nav *ngIf="auth.isAuthenticated$ | async">
+    <a mat-button routerLink="/problems">Задачи</a>
+    <a mat-button routerLink="/tags">Теги</a>
+  </nav>
+
+  <span class="spacer"></span>
+
+  <button *ngIf="auth.isAuthenticated$ | async"
+          mat-icon-button
+          (click)="logout()"
+          matTooltip="Logout">
+    <mat-icon>logout</mat-icon>
+  </button>
+</mat-toolbar>
+
+<div class="container">
+  <router-outlet></router-outlet>
+</div>

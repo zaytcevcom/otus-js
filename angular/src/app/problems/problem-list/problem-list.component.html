@@ -1,0 +1,60 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Список задач</h2>
+    <button mat-raised-button color="primary" (click)="openCreateDialog()">
+      <mat-icon>add</mat-icon> Добавить задачу
+    </button>
+  </div>
+
+  <div class="table-responsive">
+    <table mat-table [dataSource]="problems" class="mat-elevation-z8">
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let problem">{{ problem.id }}</td>
+      </ng-container>
+
+      <!-- Title Column -->
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef>Название</th>
+        <td mat-cell *matCellDef="let problem">{{ problem.title }}</td>
+      </ng-container>
+
+      <!-- Difficulty Column -->
+      <ng-container matColumnDef="difficulty">
+        <th mat-header-cell *matHeaderCellDef>Сложность</th>
+        <td mat-cell *matCellDef="let problem">
+          <span [class]="'badge ' + getDifficultyClass(problem.difficulty)">
+            {{ problem.difficulty }}
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- Tags Column -->
+      <ng-container matColumnDef="tags">
+        <th mat-header-cell *matHeaderCellDef>Теги</th>
+        <td mat-cell *matCellDef="let problem">
+          <mat-chip-listbox>
+            <mat-chip *ngFor="let tag of problem.tags">{{ tag }}</mat-chip>
+          </mat-chip-listbox>
+        </td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Действия</th>
+        <td mat-cell *matCellDef="let problem">
+          <button mat-icon-button color="primary" (click)="openEditDialog(problem)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteProblem(problem.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>
