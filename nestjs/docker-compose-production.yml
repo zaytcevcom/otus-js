@@ -51,3 +51,10 @@ volumes:
 networks:
   traefik-public:
     external: true
+
+
+  DB_HOST=194.67.109.157
+  DB_PORT=3306
+  DB_USER=sabdev
+  DB_PASSWORD="tB17zCQlpbdq"
+  DB_NAME=sabtrans_test_dev

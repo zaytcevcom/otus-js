@@ -114,4 +114,8 @@ export class ProblemFormComponent implements OnInit {
       this.problemForm.get('additionalMaterials')?.setValue([...materials]);
     }
   }
+
+  trackByTag(index: number, tag: string): string {
+    return tag;
+  }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, DestroyRef, OnInit} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,6 +9,7 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dial
 import {Tag} from '../models/tag.model';
 import {TagService} from '../tag.service';
 import {TagDialogComponent} from '../tag-dialog/tag-dialog.component';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-tag-list',
@@ -30,7 +31,8 @@ export class TagListComponent implements OnInit {
   constructor(
     private tagService: TagService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private destroyRef: DestroyRef
   ) { }
 
   ngOnInit(): void {
@@ -38,9 +40,11 @@ export class TagListComponent implements OnInit {
   }
 
   loadTags(): void {
-    this.tagService.getTags().subscribe(tags => {
-      this.dataSource.data = tags;
-    });
+    this.tagService.getTags()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(tags => {
+        this.dataSource.data = tags;
+      });
   }
 
   openAddDialog(): void {
@@ -81,10 +85,12 @@ export class TagListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.tagService.deleteTag(id).subscribe(() => {
-          this.loadTags();
-          this.snackBar.open('Тег успешно удален', 'Закрыть', { duration: 3000 });
-        });
+        this.tagService.deleteTag(id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe(() => {
+            this.loadTags();
+            this.snackBar.open('Тег успешно удален', 'Закрыть', { duration: 3000 });
+          });
       }
     });
   }

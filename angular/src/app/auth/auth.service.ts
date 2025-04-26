@@ -6,8 +6,8 @@ import {environment} from '../../environments/environment';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly API_URL = environment.apiUrl + '/auth';
-  private _isAuthenticated$ = new BehaviorSubject<boolean>(false);
-  public isAuthenticated$ = this._isAuthenticated$.asObservable();
+  private readonly _isAuthenticated$ = new BehaviorSubject<boolean>(false);
+  public readonly isAuthenticated$ = this._isAuthenticated$.asObservable();
 
   constructor(private http: HttpClient) {
     this.checkAuthStatus();

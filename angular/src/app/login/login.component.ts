@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {AuthService} from '../auth/auth.service';
@@ -30,18 +30,21 @@ import {NgIf} from '@angular/common';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  private fb = inject(FormBuilder);
-  form = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', Validators.required]
-  });
-
+  form: FormGroup;
   isLoading = false;
   error = '';
 
-  private auth = inject(AuthService);
-  private router = inject(Router);
-  private snackBar = inject(MatSnackBar);
+  constructor(
+    private fb: FormBuilder,
+    private auth: AuthService,
+    private router: Router,
+    private snackBar: MatSnackBar
+  ) {
+    this.form = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required]
+    });
+  }
 
   onSubmit() {
     if (this.form.invalid) return;

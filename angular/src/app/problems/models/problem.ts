@@ -1,5 +1,4 @@
 export interface Problem {
-  id?: number;
   title: string;
   description: string;
   inputExample: string;
@@ -7,8 +6,9 @@ export interface Problem {
   difficulty: 'Easy' | 'Medium' | 'Hard';
   tags: string[];
   additionalMaterials: number[];
-  rating?: number;
   createdBy: number;
+  id?: number;
+  rating?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }

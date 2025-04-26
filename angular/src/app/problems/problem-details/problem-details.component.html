@@ -12,7 +12,7 @@
     <mat-card-content>
       <div class="tags mb-3">
         <mat-chip-list>
-          <mat-chip *ngFor="let tag of problem.tags">{{ tag }}</mat-chip>
+          <mat-chip *ngFor="let tag of problem.tags; trackBy: trackByTag">{{ tag }}</mat-chip>
         </mat-chip-list>
       </div>
 

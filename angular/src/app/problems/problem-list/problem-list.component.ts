@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, DestroyRef, OnInit} from '@angular/core';
 import { ProblemService } from '../problem.service';
 import { Problem } from '../models/problem';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
@@ -17,6 +17,7 @@ import {
   MatTable
 } from '@angular/material/table';
 import {CommonModule, NgForOf} from '@angular/common';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-problem-list',
@@ -48,7 +49,8 @@ export class ProblemListComponent implements OnInit {
 
   constructor(
     private problemService: ProblemService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private destroyRef: DestroyRef
   ) { }
 
   ngOnInit(): void {
@@ -56,9 +58,11 @@ export class ProblemListComponent implements OnInit {
   }
 
   loadProblems(): void {
-    this.problemService.getProblems().subscribe(problems => {
-      this.problems = problems;
-    });
+    this.problemService.getProblems()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(problems => {
+        this.problems = problems;
+      });
   }
 
   openCreateDialog(): void {
@@ -93,13 +97,19 @@ export class ProblemListComponent implements OnInit {
       data: { title: 'Confirm Delete', message: 'Are you sure you want to delete this problem?' }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.problemService.deleteProblem(id).subscribe(() => {
-          this.loadProblems();
-        });
-      }
-    });
+    dialogRef.afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        if (result) {
+          this.problemService.deleteProblem(id).subscribe(() => {
+            this.loadProblems();
+          });
+        }
+      });
+  }
+
+  trackByTag(index: number, tag: string): string {
+    return tag;
   }
 
   getDifficultyClass(difficulty: 'Easy' | 'Medium' | 'Hard'): string {
