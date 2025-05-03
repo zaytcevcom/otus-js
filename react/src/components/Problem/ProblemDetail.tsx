@@ -80,7 +80,7 @@ export default function ProblemDetail({
                 <Typography variant="h6" gutterBottom>
                     Solution
                 </Typography>
-                <CodeEditor code={initialCode} onChange={onCodeChange} />
+                <CodeEditor code={initialCode} language={'javascript'} onChange={onCodeChange} height={'500px'} />
             </Box>
         </Box>
     );

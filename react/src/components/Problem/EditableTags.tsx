@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Chip, TextField, Box, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useProblemStore } from '../../store/problems';
+import TagsList from "../TagsList/TagsList.tsx";
 
 interface EditableTagsProps {
     problemId: number;
@@ -42,16 +43,14 @@ export default function EditableTags({ problemId, tags }: EditableTagsProps) {
         }
     };
 
+    const handleAdd = () => {
+        setEditing(true);
+        setTimeout(() => inputRef.current?.focus(), 0);
+    }
+
     return (
         <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 0.5 }}>
-            {currentTags.map((tag) => (
-                <Chip
-                    key={tag}
-                    label={tag}
-                    size="small"
-                    onDelete={() => handleDeleteTag(tag)}
-                />
-            ))}
+            <TagsList tags={currentTags} onDeleteTag={handleDeleteTag} />
 
             {editing ? (
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -82,10 +81,7 @@ export default function EditableTags({ problemId, tags }: EditableTagsProps) {
                     label="+ Add"
                     size="small"
                     variant="outlined"
-                    onClick={() => {
-                        setEditing(true);
-                        setTimeout(() => inputRef.current?.focus(), 0);
-                    }}
+                    onClick={handleAdd}
                     sx={{ cursor: 'pointer' }}
                 />
             )}

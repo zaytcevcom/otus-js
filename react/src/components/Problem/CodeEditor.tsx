@@ -3,9 +3,9 @@ import { useTheme } from '@mui/material';
 
 interface CodeEditorProps {
     code: string;
-    language?: string;
-    onChange?: (value: string | undefined) => void;
-    height?: string;
+    language: string;
+    onChange: (value: string) => void;
+    height: string;
 }
 
 export default function CodeEditor({
@@ -17,7 +17,7 @@ export default function CodeEditor({
     const theme = useTheme();
 
     const handleChange: OnChange = (value) => {
-        if (onChange) {
+        if (onChange && value !== undefined) {
             onChange(value);
         }
     };

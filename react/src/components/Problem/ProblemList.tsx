@@ -1,9 +1,6 @@
 import { useEffect } from 'react';
 import {
     Box,
-    Card,
-    CardContent,
-    Chip,
     CircularProgress,
     Grid,
     Typography,
@@ -14,7 +11,8 @@ import {
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useProblemStore } from '../../store/problems';
-import EditableTags from "./EditableTags.tsx";
+import {ErrorBlock} from "../ErrorBlock/ErrorBlock.tsx";
+import ProblemCard from "./ProblemCard.tsx";
 
 export default function ProblemList() {
     const {
@@ -46,11 +44,7 @@ export default function ProblemList() {
     }
 
     if (error) {
-        return (
-            <Box sx={{ p: 3 }}>
-                <Typography color="error">{error}</Typography>
-            </Box>
-        );
+        return <ErrorBlock error={error} />;
     }
 
     return (
@@ -96,51 +90,7 @@ export default function ProblemList() {
             <Grid container spacing={3}>
                 {problems.map((problem) => (
                     <Grid item xs={12} key={problem.id.toString()}>
-                        <Card variant="outlined">
-                            <CardContent>
-                                <Box
-                                    component={Link}
-                                    to={`/problem/${problem.id}`}
-                                    sx={{
-                                        textDecoration: 'none',
-                                        color: 'inherit',
-                                        '&:hover': { color: 'primary.main' },
-                                    }}
-                                >
-                                    <Typography variant="h6" component="h2">
-                                        {problem.title}
-                                    </Typography>
-                                </Box>
-                                <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, mb: 2 }}>
-                                    <Chip
-                                        label={problem.difficulty}
-                                        color={
-                                            problem.difficulty === 'Easy'
-                                                ? 'success'
-                                                : problem.difficulty === 'Medium'
-                                                    ? 'warning'
-                                                    : 'error'
-                                        }
-                                        size="small"
-                                    />
-                                    <Box sx={{ ml: 1, display: 'flex', gap: 0.5 }}>
-                                        <EditableTags problemId={problem.id} tags={problem.tags} />
-                                    </Box>
-                                </Box>
-                                <Typography
-                                    variant="body2"
-                                    color="text.secondary"
-                                    sx={{
-                                        display: '-webkit-box',
-                                        WebkitLineClamp: 2,
-                                        WebkitBoxOrient: 'vertical',
-                                        overflow: 'hidden',
-                                    }}
-                                >
-                                    {problem.description}
-                                </Typography>
-                            </CardContent>
-                        </Card>
+                        <ProblemCard problem={problem} />
                     </Grid>
                 ))}
             </Grid>

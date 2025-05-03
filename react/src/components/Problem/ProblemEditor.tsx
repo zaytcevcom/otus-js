@@ -4,13 +4,13 @@ import {
     Button,
     Box,
     MenuItem,
-    Chip,
     Divider,
 } from '@mui/material';
 import { Problem, ProblemFormData } from '../../types/problem';
+import TagsList from "../TagsList/TagsList.tsx";
 
 interface ProblemEditorProps {
-    problem?: Problem;
+    problem: Problem | null;
     onSubmit: (data: ProblemFormData) => void;
 }
 
@@ -90,14 +90,7 @@ export default function ProblemEditor({ problem, onSubmit }: ProblemEditorProps)
             />
 
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mb: 2 }}>
-                {tags.map((tag) => (
-                    <Chip
-                        key={tag}
-                        label={tag}
-                        onDelete={() => handleDeleteTag(tag)}
-                        size="small"
-                    />
-                ))}
+                <TagsList tags={tags} onDeleteTag={handleDeleteTag} />
             </Box>
 
             <Divider sx={{ my: 2 }} />

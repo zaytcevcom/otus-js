@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Typography, CircularProgress } from '@mui/material';
 import ProblemEditor from '../components/Problem/ProblemEditor';
 import { ProblemFormData } from '../types/problem';
 import { useProblemStore } from '../store/problems';
+import {useProblemData} from "../hooks/useProblemData.tsx";
 
 export default function ProblemManagePage() {
     const { id } = useParams();
@@ -17,18 +18,11 @@ export default function ProblemManagePage() {
         updateProblem,
         resetCurrentProblem
     } = useProblemStore();
-    const [isEditing, setIsEditing] = useState(false);
+    const { isEditing } = useProblemData(id ? parseInt(id) : undefined, fetchProblemById);
 
     useEffect(() => {
         resetCurrentProblem();
     }, [resetCurrentProblem]);
-
-    useEffect(() => {
-        if (id) {
-            fetchProblemById(parseInt(id));
-            setIsEditing(true);
-        }
-    }, [id, fetchProblemById]);
 
     const handleSubmit = async (data: ProblemFormData) => {
         const problemData = {
@@ -73,7 +67,7 @@ export default function ProblemManagePage() {
                 {isEditing ? 'Edit Problem' : 'Create New Problem'}
             </Typography>
             <ProblemEditor
-                problem={currentProblem || undefined}
+                problem={currentProblem}
                 onSubmit={handleSubmit}
             />
         </Box>
